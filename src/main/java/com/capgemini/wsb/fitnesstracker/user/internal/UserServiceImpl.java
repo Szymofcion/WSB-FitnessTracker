@@ -40,5 +40,12 @@ class UserServiceImpl implements UserService, UserProvider {
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
-
+    @Override
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
+    @Override
+    public List<User> searchUsersByEmail(String emailFragment) {
+        return userRepository.findByEmailContainingIgnoreCase(emailFragment);
+    }
 }

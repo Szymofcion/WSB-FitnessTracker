@@ -23,4 +23,3 @@ public class MyBean {
         System.out.println("Destroying..");
     }
 }
-
