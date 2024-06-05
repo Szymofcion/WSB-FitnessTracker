@@ -6,9 +6,12 @@ import com.capgemini.wsb.fitnesstracker.training.api.TrainingProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,4 +85,24 @@ public class TrainingServiceImpl implements TrainingProvider {
 
         trainingRepository.delete(training);
     }
+    @Override
+    public List<Training> findAllFinishedTrainings(LocalDate finishDate) {
+        LocalDateTime finishDateTime = finishDate.atStartOfDay();
+        List<Training> finishedTrainings = trainingRepository.findAll()
+                .stream()
+                .filter(training -> training.getEndTime().after(convertToDate(finishDateTime)))
+                .filter(training -> training.getEndTime().before(convertToDate(finishDateTime.plusDays(1))))
+                .collect(Collectors.toList());
+        return finishedTrainings;
+        // test
+    }
+    private Date convertToDate(LocalDateTime localDateTime) {
+        return java.sql.Timestamp.valueOf(localDateTime);
+    }
+
+    public List<Training> findAllTrainingsByActivity(String activityType) {
+        ActivityType activityTypeEnum = ActivityType.valueOf(activityType.toUpperCase());
+        return trainingRepository.findByActivityType(activityTypeEnum);
+    }
+
 }

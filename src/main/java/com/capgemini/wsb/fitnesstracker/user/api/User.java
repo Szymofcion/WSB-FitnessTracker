@@ -1,7 +1,7 @@
 package com.capgemini.wsb.fitnesstracker.user.api;
 
 import com.capgemini.wsb.fitnesstracker.training.api.Training;
-import jakarta.annotation.Nullable;
+import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -35,6 +35,10 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    // Pole przechowujące listę treningów
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Training> trainings;
+
     public User(
             final String firstName,
             final String lastName,
@@ -47,6 +51,8 @@ public class User {
         this.email = email;
     }
 
-
+    // Getter dla listy treningów
+    public List<Training> getTrainings() {
+        return trainings;
+    }
 }
-

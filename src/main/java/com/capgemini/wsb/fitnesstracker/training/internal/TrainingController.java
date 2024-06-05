@@ -2,10 +2,12 @@ package com.capgemini.wsb.fitnesstracker.training.internal;
 
 import com.capgemini.wsb.fitnesstracker.training.api.Training;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -51,4 +53,21 @@ public class TrainingController {
         trainingService.deleteTraining(trainingId);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/finished/{finishDate}")
+    public List<TrainingDto> getAllFinishedTrainings(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate finishDate) {
+        return trainingService.findAllFinishedTrainings(finishDate)
+                .stream()
+                .map(trainingMapper::toDto)
+                .toList();
+    }
+    @GetMapping("/byActivity")
+    public List<TrainingDto> getAllTrainingsByActivity(@RequestParam("type") String activityType) {
+        // Pobierz listę treningów dla określonego typu aktywności
+        List<Training> trainings = trainingService.findAllTrainingsByActivity(activityType);
+        // Mapuj treningi na DTO i zwróć listę DTO
+        return trainings.stream()
+                .map(trainingMapper::toDto)
+                .toList();
+    }
+
 }
