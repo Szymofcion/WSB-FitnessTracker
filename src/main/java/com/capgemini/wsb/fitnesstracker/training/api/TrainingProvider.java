@@ -1,10 +1,17 @@
 package com.capgemini.wsb.fitnesstracker.training.api;
 
-import com.capgemini.wsb.fitnesstracker.user.api.User;
+import com.capgemini.wsb.fitnesstracker.training.internal.ActivityType;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public interface TrainingProvider {
+    List<Training> findTrainingsByUserId(Long userId);
+
+    List<Training> findAllTrainings();
+
+    Training createTraining(Training training);
 
     /**
      * Retrieves a training based on their ID.
@@ -13,6 +20,24 @@ public interface TrainingProvider {
      * @param trainingId id of the training to be searched
      * @return An {@link Optional} containing the located Training, or {@link Optional#empty()} if not found
      */
-    Optional<User> getTraining(Long trainingId);
+    Optional<Training> getTraining(
+            Long trainingId
+    );
+    List<Training> getAllTrainings();
+    List<Training> getAllTrainingsForUser(
+            long userId
+    );
+    Training addTraining(
+            Training training
+    );
+    List<Training> getAllFinishTrainings(
+            Date finishData
+    );
+    List<Training> getAllTrainingTypes(
+            ActivityType activity
+    );
 
+    Training updateTraining(Long trainingId, Training trainingDetails);
+
+    void deleteTraining(Long trainingId);
 }

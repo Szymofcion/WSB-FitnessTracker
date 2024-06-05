@@ -9,4 +9,5 @@ public interface UserService {
     User createUser(User user);
 
     void deleteUser(Long userId);
+
 }
